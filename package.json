@@ -13,7 +13,7 @@
     "make:linux": "electron-forge make --platform linux",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\"",
-    "rebuild": "electron-rebuild -f -w electron-vue-serial"
+    "rebuild": "electron-rebuild -f"
   },
   "keywords": [
     "electron",
