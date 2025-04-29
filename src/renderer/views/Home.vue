@@ -1,24 +1,26 @@
 <template>
   <div class="home">
-    <h1>Welcome to Electron Vue Serial</h1>
-    <p>This is a cross-platform application built with Electron and Vue 3.</p>
-    <div class="features">
-      <h2>Features:</h2>
-      <ul>
-        <li>Electron for cross-platform desktop app</li>
-        <li>Vue 3 for modern UI development</li>
-        <li>Vite for fast development</li>
-        <li>Vue Router for navigation</li>
-        <li>Serial port communication (coming soon)</li>
-      </ul>
+    <button @click="getAll">获取所有串口列表</button>
+    <div>
+      {{list}}
     </div>
     <router-link to="/about" class="nav-link">About</router-link>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'Home'
+<script setup>
+import { shallowRef } from "vue";
+import { getPorts } from '../../serial-port-utils/serial-port-utils';
+
+const list = shallowRef([]);
+
+const getAll = async () => {
+  try {
+    const ports = await getPorts();
+    list.value = ports;
+  } catch (error) {
+    console.error('获取串口列表失败:', error);
+  }
 }
 </script>
 
