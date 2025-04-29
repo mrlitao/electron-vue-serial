@@ -4,14 +4,17 @@ const path = require('path');
 
 module.exports = {
   packagerConfig: {
-    asar: true
+    asar: true,
+    executableName: 'electron-vue-serial',
+    name: 'electron-vue-serial'
   },
   rebuildConfig: {},
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
       config: {
-        name: 'electron-vue-serial'
+        name: 'electron-vue-serial',
+        exe: 'electron-vue-serial.exe'
       }
     },
     {
@@ -20,16 +23,29 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-deb',
-      config: {}
+      config: {
+        options: {
+          name: 'electron-vue-serial',
+          productName: 'ElectronVueSerial',
+          maintainer: 'Your Name',
+          homepage: 'https://github.com/yourusername/electron-vue-serial'
+        }
+      }
     },
     {
       name: '@electron-forge/maker-rpm',
-      config: {}
+      config: {
+        options: {
+          name: 'electron-vue-serial',
+          productName: 'ElectronVueSerial'
+        }
+      }
     },
     {
       name: '@electron-forge/maker-dmg',
       config: {
-        format: 'ULFO'
+        format: 'ULFO',
+        name: 'ElectronVueSerial'
       }
     }
   ],
