@@ -1,6 +1,7 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
+import serialPortService from './node-service/serial-port-utils';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -14,6 +15,8 @@ const createWindow = () => {
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true,
+      contextIsolation: true,
     },
   });
 
@@ -26,13 +29,68 @@ const createWindow = () => {
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+
+  return mainWindow;
 };
+
+// 设置IPC通信
+function setupIPC(mainWindow) {
+  // 获取串口列表
+  ipcMain.handle('serial:list-ports', async () => {
+    try {
+      const ports = await serialPortService.listPorts();
+      return ports;
+    } catch (error) {
+      console.error('Error listing ports:', error);
+      throw error;
+    }
+  });
+
+  // 连接串口
+  ipcMain.handle('serial:connect', async (event, { path, options }) => {
+    try {
+      await serialPortService.connect(path, options);
+      return true;
+    } catch (error) {
+      console.error('Error connecting to port:', error);
+      throw error;
+    }
+  });
+
+  // 发送数据
+  ipcMain.handle('serial:write', async (event, data) => {
+    try {
+      await serialPortService.write(data);
+      return true;
+    } catch (error) {
+      console.error('Error writing to port:', error);
+      throw error;
+    }
+  });
+
+  // 断开连接
+  ipcMain.handle('serial:disconnect', async () => {
+    try {
+      await serialPortService.disconnect();
+      return true;
+    } catch (error) {
+      console.error('Error disconnecting port:', error);
+      throw error;
+    }
+  });
+
+  // 监听串口数据
+  serialPortService.port?.on('data', (data) => {
+    mainWindow.webContents.send('serial:data', data.toString());
+  });
+}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  createWindow();
+  const mainWindow = createWindow();
+  // setupIPC(mainWindow);
 
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
@@ -50,6 +108,11 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
+});
+
+// 应用退出时清理
+app.on('before-quit', async () => {
+  await serialPortService.disconnect();
 });
 
 // In this file you can include the rest of your app's specific main process

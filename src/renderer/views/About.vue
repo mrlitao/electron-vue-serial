@@ -1,16 +1,14 @@
 <template>
   <div class="about">
-    <h1>About This Application</h1>
-    <p>This is an Electron application built with modern web technologies:</p>
+    <h1>关于</h1>
+    <p>这是一个基于 Electron + Vue3 的串口通信工具，支持以下功能：</p>
     <ul>
-      <li>Electron - for building cross-platform desktop applications</li>
-      <li>Vue 3 - for reactive UI components</li>
-      <li>Vite - for fast development and building</li>
-      <li>Vue Router - for client-side routing</li>
-      <li>Electron Forge - for packaging and distribution</li>
+      <li>串口设备自动发现</li>
+      <li>串口连接管理</li>
+      <li>数据发送和接收</li>
+      <li>跨平台支持 (Windows, macOS, Linux)</li>
     </ul>
-    <p>This application will support serial port communication for hardware interaction.</p>
-    <router-link to="/" class="nav-link">Back to Home</router-link>
+    <router-link to="/" class="nav-link">返回首页</router-link>
   </div>
 </template>
 
@@ -27,6 +25,11 @@ export default {
   margin: 0 auto;
 }
 
+h1 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
 ul {
   margin: 20px 0;
   padding-left: 20px;
@@ -34,6 +37,7 @@ ul {
 
 li {
   margin: 10px 0;
+  color: #666;
 }
 
 .nav-link {
@@ -43,6 +47,7 @@ li {
   color: white;
   text-decoration: none;
   border-radius: 4px;
+  margin-top: 20px;
 }
 
 .nav-link:hover {
