@@ -10,10 +10,11 @@
     "make": "electron-forge make",
     "make:win": "electron-forge make --platform win32",
     "make:mac": "electron-forge make --platform darwin",
+    "make:mac-debug": "electron-forge make --platform darwin --debug",
     "make:linux": "electron-forge make --platform linux",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\"",
-    "rebuild": "electron-rebuild"
+    "rebuild": "electron-rebuild -f -w serialport"
   },
   "keywords": [
     "electron",
@@ -27,18 +28,18 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@electron-forge/cli": "^7.0.0",
-    "@electron-forge/maker-deb": "^7.0.0",
-    "@electron-forge/maker-dmg": "^7.0.0",
-    "@electron-forge/maker-rpm": "^7.0.0",
-    "@electron-forge/maker-squirrel": "^7.0.0",
-    "@electron-forge/maker-zip": "^7.0.0",
-    "@electron-forge/plugin-auto-unpack-natives": "^7.0.0",
-    "@electron-forge/plugin-fuses": "^7.0.0",
-    "@electron-forge/plugin-vite": "^7.0.0",
+    "@electron-forge/cli": "^7.3.0",
+    "@electron-forge/maker-deb": "^7.3.0",
+    "@electron-forge/maker-dmg": "^7.3.0",
+    "@electron-forge/maker-rpm": "^7.3.0",
+    "@electron-forge/maker-squirrel": "^7.3.0",
+    "@electron-forge/maker-zip": "^7.3.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.3.0",
+    "@electron-forge/plugin-fuses": "^7.3.0",
+    "@electron-forge/plugin-vite": "^7.3.0",
     "@electron/fuses": "^1.7.0",
     "@electron/rebuild": "^3.3.0",
-    "electron": "^28.2.3",
+    "electron": "^32.2.6",
     "vite": "^5.0.0"
   },
   "dependencies": {

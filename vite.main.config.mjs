@@ -1,10 +1,9 @@
 import { defineConfig } from 'vite';
 
-// https://vitejs.dev/config
 export default defineConfig({
   build: {
     rollupOptions: {
-      external: ["serialport"], // Mark serialport as external
+      // external: ['serialport', '@serialport/bindings-cpp'], // 添加所有 serialport 相关的模块
     },
   },
 });

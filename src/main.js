@@ -2,7 +2,17 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 // import { getPorts } from './serial-port-utils/serial-port-utils'
-import { SerialPort } from 'serialport';
+// import { SerialPort } from 'serialport';
+const { SerialPort } = require('serialport');
+console.log('app path:', app.getAppPath());
+console.log('resource path:', process.resourcesPath);
+try {
+  const serialport = require('serialport');
+  console.log('serialport loaded:', serialport);
+} catch (err) {
+  console.error('serialport load error:', err);
+}
+// app.allowRendererProcessReuse = false;
 
 /**
  * 读取当前设备串口列表

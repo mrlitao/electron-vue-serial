@@ -4,11 +4,11 @@
       <el-row>
         <el-col :span="24">
           <el-form-item label="选择串口" prop="portPath">
-            <div style="display: flex;">
-              <el-select v-model="formObject.portPath" placeholder="请选择串口">
+            <div style="width: 100%; display: flex;">
+              <el-select v-model="formObject.portPath" placeholder="请选择串口" style="margin-right: 8px; min-width: 0;flex: 1;">
                 <el-option v-for="port in list" :key="port.path" :label="port.path" :value="port.path" />
               </el-select>
-              <el-button type="primary" circle @click="getAll">刷新</el-button>
+              <el-button type="primary" @click="getAll">刷新</el-button>
             </div>
           </el-form-item>
         </el-col>
@@ -120,30 +120,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.home {
-  padding: 20px;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.features {
-  margin-top: 20px;
-  padding: 20px;
-  background-color: #f5f5f5;
-  border-radius: 8px;
-}
-
-.nav-link {
-  display: inline-block;
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #42b983;
-  color: white;
-  text-decoration: none;
-  border-radius: 4px;
-}
-
-.nav-link:hover {
-  background-color: #3aa876;
-}
+  .home {
+    padding: 20px;
+  }
 </style>

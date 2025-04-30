@@ -1,18 +1,20 @@
 const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
-const path = require('path');
 
 module.exports = {
   packagerConfig: {
     asar: true,
     executableName: 'electron-vue-serial',
     name: 'electron-vue-serial',
-    extraResource: [
-      // 如果有需要额外包含的资源文件，可以在这里添加
+    extraResource: [],
+    asarUnpack: [
+      "node_modules/serialport/**/*",
+      "node_modules/@serialport/**/*",
+      "node_modules/@serialport/bindings-cpp/**/*"
     ]
   },
   rebuildConfig: {
-    // 确保原生模块被正确重建
+    force: true,
     onlyModules: ['serialport', '@serialport/bindings-cpp']
   },
   makers: [
@@ -77,6 +79,13 @@ module.exports = {
             config: 'vite.renderer.config.mjs',
           },
         ],
+      },
+    },
+    {
+      name: '@electron-forge/plugin-auto-unpack-natives',
+      config: {
+        // 添加 serialport 相关模块到自动解包列表
+        modules: ['serialport', '@serialport/bindings-cpp']
       },
     },
     // Fuses are used to enable/disable various Electron functionality
