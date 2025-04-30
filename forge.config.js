@@ -6,9 +6,15 @@ module.exports = {
   packagerConfig: {
     asar: true,
     executableName: 'electron-vue-serial',
-    name: 'electron-vue-serial'
+    name: 'electron-vue-serial',
+    extraResource: [
+      // 如果有需要额外包含的资源文件，可以在这里添加
+    ]
   },
-  rebuildConfig: {},
+  rebuildConfig: {
+    // 确保原生模块被正确重建
+    onlyModules: ['serialport', '@serialport/bindings-cpp']
+  },
   makers: [
     {
       name: '@electron-forge/maker-squirrel',

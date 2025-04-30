@@ -1,13 +1,15 @@
 <template>
   <div class="home">
-    <button @click="getAll">获取所有串口列表</button>
     <el-form ref="formRef" :model="formObject" :rules="rules" label-width="140px">
       <el-row>
         <el-col :span="24">
           <el-form-item label="选择串口" prop="portPath">
-            <el-select v-model="formObject.portPath" placeholder="请选择串口">
-              <el-option v-for="port in list" :key="port.path" :label="port.path" :value="port.path" />
-            </el-select>
+            <div style="display: flex;">
+              <el-select v-model="formObject.portPath" placeholder="请选择串口">
+                <el-option v-for="port in list" :key="port.path" :label="port.path" :value="port.path" />
+              </el-select>
+              <el-button type="primary" circle @click="getAll">刷新</el-button>
+            </div>
           </el-form-item>
         </el-col>
         <el-col :span="24">
