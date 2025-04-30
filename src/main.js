@@ -14,6 +14,41 @@ ipcMain.handle("load-device-serial-ports", async () => {
   // mainWindow.webContents.send("load-device-serial-ports", ports)
 })
 
+/**
+ * 发送串口消息
+ * @param {*} event
+ * @param {object} data.portPath 串口路径
+ * @param {object} data.message 发送的消息
+ */
+ipcMain.handle("send-serial-port-message", async (event, data) => {
+  console.log("send-serial-port-message", {event, data});
+  if (!data.portPath || !data.message) {
+    return
+  }
+  const port = new SerialPort({path: data.portPath, baudRate: 115200, autoOpen: false});
+  port.on("error", err => {
+    console.log("发生错误: " + err.message + "\n");
+  });
+  port.on("data", data => {
+    console.log("收到数据: " + data + "\n");
+  })
+  port.open(function (err) {
+    if (err) {
+      console.log("打开串口失败: " + err.message + "\n");
+    } else {
+      console.log("打开串口成功\n");
+    }
+  })
+  port.write(JSON.stringify(data.message), function (err) {
+    if (err) {
+      console.log("发送数据失败: " + err.message + "\n");
+    } else {
+      console.log("发送数据成功\n");
+    }
+  })
+  return port
+})
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
   app.quit();

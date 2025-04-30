@@ -1,12 +1,12 @@
 <template>
   <div class="home">
     <button @click="getAll">获取所有串口列表</button>
-    <el-form :model="formObject" label-width="140px">
+    <el-form ref="formRef" :model="formObject" :rules="rules" label-width="140px">
       <el-row>
         <el-col :span="24">
-          <el-form-item label="选择串口">
-            <el-select v-model="formObject.selectedPort" placeholder="请选择串口">
-              <el-option v-for="port in list" :key="port" :label="port" :value="port" />
+          <el-form-item label="选择串口" prop="portPath">
+            <el-select v-model="formObject.portPath" placeholder="请选择串口">
+              <el-option v-for="port in list" :key="port.path" :label="port.path" :value="port.path" />
             </el-select>
           </el-form-item>
         </el-col>
@@ -29,20 +29,30 @@
           </el-form-item>
         </el-col>
       </el-row>
-
     </el-form>
-    <el-button type="primary" size="large">测 试</el-button>
+    <el-button type="primary" size="large" @click="send">测 试</el-button>
     <!-- <router-link to="/about" class="nav-link">About</router-link> -->
   </div>
 </template>
 
 <script setup>
 const { ipcRenderer } = require('electron')
-import { onMounted, reactive, shallowRef } from "vue";
+import { onMounted, reactive, shallowRef, toRaw } from "vue";
 import { ElButton, ElRow, ElCol, ElForm, ElFormItem, ElSelect, ElOption, ElInput, ElInputNumber } from 'element-plus'
 // import { ipcRenderer } from "electron"
 const list = shallowRef([]);
-
+const formRef = shallowRef(null);
+const rules = {
+  portPath: [
+    { required: true, message: '请选择串口', trigger: 'blur' },
+  ],
+  device_name: [
+    { required: true, message: '请输入用户名', trigger: 'blur' },
+  ],
+  product_key: [
+    { required: true, message: '请输入密码', trigger: 'blur' },
+  ],
+}
 const columns = [
   { label: "用户名", prop: "device_name", type: "string", span: 12 },
   { label: "密码", prop: "product_key", type: "passward", span: 12 },
@@ -78,7 +88,7 @@ const formObject = reactive({
   alarm_voltage: undefined, // 电压阈值(int) 示例: 110
   alarm_current: undefined, // 电流阈值(int) 示例: 10
   up_time: undefined, // 上报时间(int)
-  selectedPort: null,
+  portPath: "",
 });
 const getAll = async () => {
   try {
@@ -91,6 +101,17 @@ const getAll = async () => {
   }
 }
 
+const send = () => {
+  formRef.value.validate(async (valid) => {
+    if (!valid) return
+    console.log(formObject);
+    const data = toRaw(formObject)
+    ipcRenderer.invoke("send-serial-port-message", data).then((res) => {
+      console.log({ res });
+    });
+  });
+
+}
 onMounted(() => {
   getAll();
 })
